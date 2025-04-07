@@ -2,7 +2,7 @@
 
 ## 📘 Overview
 
-**Quora-Lite** is a minimal, backend-focused Q&A platform inspired by Quora. It allows users to register, post questions, answer other users' questions, and like answers. The goal is to implement core functionality using Django, Django Forms, and optionally Django REST Framework with Swagger UI for testing.
+**Quora-Lite** is a minimal, backend-focused Q&A platform inspired by Quora. It allows users to register, post questions, answer other users' questions, and like answers. The goal is to implement core functionality using Django, Django Forms
 
 ---
 
@@ -109,13 +109,5 @@
 | `/register/` | GET, POST | User registration |
 | `/login/` | GET, POST | User login |
 | `/logout/` | GET | User logout |
-
----
-
-## 🚀 Bonus Features (Optional)
-- REST API for all entities
-- Swagger UI for easy testing
-- Pagination for questions/answers
-- Profile page with user activity
 
 ---

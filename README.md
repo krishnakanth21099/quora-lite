@@ -82,13 +82,13 @@ python manage.py createsuperuser
 ### 7. Run Development Server
 
 ```bash
-python manage.py runserver
+python manage.py runserver {host}:{port}
 ```
 
 ## API Exploration
 
-### Swagger UI
-Access API documentation at: `http://localhost:8000/swagger/`
+### API
+Access API: `http://{host}:{port}/`
 
 ### Available Endpoints
 
