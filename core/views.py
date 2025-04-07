@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .forms import UserRegistrationForm, QuestionForm, AnswerForm
 from .models import Question, Answer, AnswerLike
+from django.db.models import Count
 
 def register(request):
     """
@@ -37,15 +38,19 @@ def home(request):
     Render the home page with all questions.
 
     Retrieves all questions from the database, ordered by creation date (most recent first),
-    and displays them on the home page.
+    and displays them on the home page with their answer count.
 
     Args:
         request (HttpRequest): The incoming HTTP request
 
     Returns:
-        HttpResponse: Rendered home page with list of questions
+        HttpResponse: Rendered home page with list of questions and their answer counts
     """
-    questions = Question.objects.all().order_by('-created_at')
+    # Annotate questions with their answer count
+    questions = Question.objects.annotate(
+        answer_count=Count('answers')
+    ).order_by('-created_at')
+    
     return render(request, 'core/home.html', {'questions': questions})
 
 @login_required
