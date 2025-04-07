@@ -87,6 +87,10 @@ python manage.py runserver {host}:{port}
 
 ## API Exploration
 
+### API Documentation
+
+Access API documentation: `http://{host}:{port}/api-docs/`
+
 ### API
 Access API: `http://{host}:{port}/`
 

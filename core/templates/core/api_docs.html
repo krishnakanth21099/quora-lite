@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}API Documentation{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body api-docs">
+                    {{ markdown_content|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .api-docs h1 { color: #2c3e50; margin-bottom: 1rem; }
+    .api-docs h2 { color: #34495e; margin-top: 2rem; }
+    .api-docs h3 { color: #7f8c8d; margin-top: 1.5rem; }
+    .api-docs code { background: #f8f9fa; padding: 2px 4px; border-radius: 4px; }
+    .api-docs pre { background: #f8f9fa; padding: 1rem; border-radius: 8px; }
+    .api-docs pre code { background: none; padding: 0; }
+    .api-docs ul { margin-bottom: 1rem; }
+    .api-docs p { margin-bottom: 0.5rem; }
+</style>
+{% endblock %}
