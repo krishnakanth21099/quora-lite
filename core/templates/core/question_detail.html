@@ -40,13 +40,16 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="like-section">
-                        <button class="btn btn-sm btn-outline-primary like-button" data-answer-id="{{ answer.id }}">
-                            <span class="like-count">{{ answer.like_count }}</span> Likes
+                        <button class="btn btn-sm {% if answer.id in user_likes %}btn-primary{% else %}btn-outline-primary{% endif %} like-button" 
+                                data-answer-id="{{ answer.id }}">
+                            <i class="bi bi-heart-fill"></i>
+                            <span class="like-count">{{ answer.like_count }}</span>
                         </button>
                     </div>
                     {% else %}
                     <div class="text-muted">
-                        <span class="like-count">{{ answer.like_count }}</span> Likes
+                        <i class="bi bi-heart"></i>
+                        <span class="like-count">{{ answer.like_count }}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -61,6 +64,31 @@
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .like-button {
+        transition: all 0.2s ease;
+        min-width: 80px;
+    }
+    .like-button:hover {
+        transform: scale(1.05);
+    }
+    .like-button.btn-outline-primary:hover {
+        background-color: #0d6efd20;
+        color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    .like-button.btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    .like-button i {
+        margin-right: 4px;
+    }
+</style>
+{% endblock %}
+
 {% block extra_js %}
 <script>
 $(document).ready(function() {
@@ -73,7 +101,11 @@ $(document).ready(function() {
         })
         .done(function(data) {
             button.find('.like-count').text(data.like_count);
-            button.toggleClass('btn-outline-primary btn-primary');
+            if (data.liked) {
+                button.removeClass('btn-outline-primary').addClass('btn-primary');
+            } else {
+                button.removeClass('btn-primary').addClass('btn-outline-primary');
+            }
         });
     });
 });

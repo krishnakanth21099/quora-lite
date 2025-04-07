@@ -97,7 +97,16 @@ def question_detail(request, pk):
     question = get_object_or_404(Question, pk=pk)
     answers = question.answers.all().order_by('-created_at')
     
-    if request.method == 'POST' and request.user.is_authenticated:
+    # Get like status for each answer if user is authenticated
+    if request.user.is_authenticated:
+        user_likes = AnswerLike.objects.filter(
+            answer__in=answers,
+            liked_by=request.user
+        ).values_list('answer_id', flat=True)
+    else:
+        user_likes = []
+    
+    if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
@@ -105,14 +114,15 @@ def question_detail(request, pk):
             answer.answered_by = request.user
             answer.save()
             messages.success(request, 'Answer posted successfully!')
-            return redirect('question_detail', pk=question.pk)
+            return redirect('question_detail', pk=pk)
     else:
         form = AnswerForm()
     
     return render(request, 'core/question_detail.html', {
         'question': question, 
         'answers': answers, 
-        'form': form
+        'form': form,
+        'user_likes': list(user_likes)
     })
 
 @login_required
