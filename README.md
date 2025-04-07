@@ -22,8 +22,7 @@ Quora Lite is a lightweight Question and Answer platform built with Django, prov
 
 - Backend: Django 5.2
 - Database: PostgreSQL
-- Frontend: HTML, Bootstrap 5
-- API Documentation: Swagger/ReDoc
+- Frontend: HTML
 
 ## Setup and Installation
 
