@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ question.title }} - Quora Lite{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">{{ question.title }}</h2>
+                <p class="card-text">{{ question.description }}</p>
+                <div class="text-muted small">
+                    Asked by {{ question.created_by.username }} on {{ question.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Your Answer</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Post Answer</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <h3 class="mb-3">{{ answers.count }} Answer{{ answers.count|pluralize }}</h3>
+        
+        {% for answer in answers %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text">{{ answer.content }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted small">
+                        Answered by {{ answer.answered_by.username }} on {{ answer.created_at|date:"M d, Y" }}
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="like-section">
+                        <button class="btn btn-sm btn-outline-primary like-button" data-answer-id="{{ answer.id }}">
+                            <span class="like-count">{{ answer.like_count }}</span> Likes
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="text-muted">
+                        <span class="like-count">{{ answer.like_count }}</span> Likes
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            No answers yet. Be the first to answer this question!
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('.like-button').click(function() {
+        var button = $(this);
+        var answerId = button.data('answer-id');
+        
+        $.post('/answer/' + answerId + '/like/', {
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        })
+        .done(function(data) {
+            button.find('.like-count').text(data.like_count);
+            button.toggleClass('btn-outline-primary btn-primary');
+        });
+    });
+});
+</script>
+{% endblock %}

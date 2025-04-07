@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home - Quora Lite{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="mb-4">Recent Questions</h2>
+        {% if user.is_authenticated %}
+        <div class="mb-4">
+            <a href="{% url 'question_create' %}" class="btn btn-primary">Ask a Question</a>
+        </div>
+        {% endif %}
+
+        {% for question in questions %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'question_detail' pk=question.pk %}" class="text-decoration-none">
+                        {{ question.title }}
+                    </a>
+                </h5>
+                <p class="card-text">{{ question.description|truncatewords:50 }}</p>
+                <div class="text-muted small">
+                    Asked by {{ question.created_by.username }} on {{ question.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            No questions have been asked yet. Be the first to ask a question!
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
